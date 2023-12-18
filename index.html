@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews Widget</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+
+</head>
+<body>
+
+    <div class="widget-container">
+
+        <!-- Total count, average rating, and star icons -->
+        <div class="header">
+            <p id="total-count"></p>
+            <p id="average-rating"></p>
+            <p id="star-icons"></p>
+        </div>
+    
+        <!-- Container for paginated reviews -->
+        <div id="reviews-container"></div>
+            
+
+        <!-- Button to open the review generation link -->
+        <div class="center-button">
+            <button class="button" id="review-generation-button">Leave a Review</button>
+        </div>
+            
+    </div>
+    
+<script src="reviews-widget.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Replace 'YOUR_ENTITY_ID' with the actual entity ID
+        initWidget({ entityId: '3111644719761037225' });
+    });
+</script>
+
+
+</body>
+</html>
