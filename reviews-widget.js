@@ -69,7 +69,11 @@ function displayReviews() {
     const paginationContainer = document.getElementById("pagination-container");
 
     if (!Array.isArray(reviews) || reviews.length === 0) {
-        // No reviews loaded yet, wait for the next iteration
+        totalCountElement.innerHTML = "<h2>Be the first to leave a review!</h2>";
+        averageRatingElement.textContent = "";
+        starIconsElement.innerHTML = "";
+        reviewsContainer.innerHTML = ""; // Clear reviews container
+        paginationContainer.innerHTML = ""; // Clear pagination container
         return;
     }
 
