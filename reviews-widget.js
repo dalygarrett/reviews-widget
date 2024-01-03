@@ -1,13 +1,13 @@
 // reviews-widget.js
 
-
 let reviewGenerationUrl;
 let firstPartyReviewPage;
 let averageRating;
 let entityName;
+let reviews = []; // Declare reviews in the outer scope
+
 
 function initWidget(config) {
-    
     // Extract the entity ID from the configuration
     const entityId = config.entityId;
 
@@ -26,8 +26,11 @@ function initWidget(config) {
             // Make the second API call to retrieve reviews using the obtained entity ID
             return fetchReviews(entityId);
         })
-        .then((reviews) => {
-            console.log("Reviews:", reviews);
+        .then((fetchedReviews) => {
+            console.log("Reviews:", fetchedReviews);
+
+            // Update the reviews variable with the fetched reviews
+            reviews = fetchedReviews;
 
             // Extract review details
             const reviewDetails = reviews.map((review) => ({
@@ -36,7 +39,7 @@ function initWidget(config) {
                 publisher: review.publisher,
                 rating: review.rating,
                 reviewDate: review.reviewDate,
-                comments: review.comments
+                comments: review.comments,
             }));
 
             // Calculate the average rating
@@ -49,40 +52,103 @@ function initWidget(config) {
             console.log("Average Rating:", averageRating);
 
             // Display paginated reviews
-            displayReviews(reviewDetails);
+            displayReviews();
         })
         .catch((error) => {
             console.error("Error:", error);
         });
 }
 
-function displayReviews(reviewDetails) {
+function displayReviews() {
     // Display total count and average rating
-    const totalCountElement = document.getElementById('total-count');
-    const averageRatingElement = document.getElementById('average-rating');
-    const starIconsElement = document.getElementById('star-icons');
-    const reviewsContainer = document.getElementById('reviews-container');
+    // Display total count and average rating
+    const totalCountElement = document.getElementById("total-count");
+    const averageRatingElement = document.getElementById("average-rating");
+    const starIconsElement = document.getElementById("star-icons");
+    const reviewsContainer = document.getElementById("reviews-container");
+    const paginationContainer = document.getElementById("pagination-container");
 
-    if (reviewDetails.length === 0) {
-        // Display a message when there are no reviews
-        totalCountElement.textContent = 'Be the first to leave a review!';
-        averageRatingElement.textContent = '';
-        starIconsElement.innerHTML = '';
-    } else {
-        // Display total count and average rating
-        totalCountElement.textContent = `Total Reviews: ${reviewDetails.length}`;
-        averageRatingElement.textContent = `Average Rating: ${averageRating.toFixed(2)}`;
-        starIconsElement.innerHTML = getStarIcons(averageRating);
-
-        // Display paginated reviews
-        const reviewsPerPage = 5;
-
-        for (let i = 0; i < reviewDetails.length; i += reviewsPerPage) {
-            const pageReviews = reviewDetails.slice(i, i + reviewsPerPage);
-            const pageElement = createReviewPageElement(pageReviews);
-            reviewsContainer.appendChild(pageElement);
-        }
+    if (!Array.isArray(reviews) || reviews.length === 0) {
+        // No reviews loaded yet, wait for the next iteration
+        return;
     }
+
+    // Calculate the average rating
+    const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+    averageRating = reviews.length > 0 ? totalRating / reviews.length : 0;
+
+    // Display total count and average rating
+    totalCountElement.textContent = `Total Reviews: ${reviews.length}`;
+    averageRatingElement.textContent = `Average Rating: ${averageRating.toFixed(2)}`;
+    starIconsElement.innerHTML = getStarIcons(averageRating);
+
+    // Display paginated reviews
+    const reviewsPerPage = 5;
+    const totalPages = Math.ceil(reviews.length / reviewsPerPage);
+
+    // Clear existing content
+    reviewsContainer.innerHTML = "";
+    paginationContainer.innerHTML = "";
+
+    // Display only the first page or the most recent 5 reviews
+    const initialPageReviews = reviews.slice(0, reviewsPerPage);
+    const pageElement = createReviewPageElement(initialPageReviews);
+    reviewsContainer.appendChild(pageElement);
+
+    // Display pagination controls
+    for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement("button");
+        button.textContent = i;
+        button.classList.add("pagination-button");
+        button.addEventListener("click", () => paginate(i, reviewsPerPage));
+        paginationContainer.appendChild(button);
+    }
+
+}
+
+function paginate(currentPage, reviewsPerPage) {
+    const startIndex = (currentPage - 1) * reviewsPerPage;
+    const endIndex = startIndex + reviewsPerPage;
+    const pageReviews = reviews.slice(startIndex, endIndex);
+    const reviewsContainer = document.getElementById("reviews-container");
+    reviewsContainer.innerHTML = ""; // Clear reviews container
+    const pageElement = createReviewPageElement(pageReviews);
+    reviewsContainer.appendChild(pageElement);
+}
+
+function updatePaginationControls(totalPages) {
+    const paginationContainer = document.getElementById('pagination-container');
+    
+    // Clear existing pagination controls
+    paginationContainer.innerHTML = '';
+
+    // Create left arrow button
+    const leftArrow = document.createElement('button');
+    leftArrow.textContent = '←';
+    leftArrow.addEventListener('click', () => navigatePage(-1));
+    paginationContainer.appendChild(leftArrow);
+
+    // Create page number buttons
+    for (let i = 0; i < totalPages; i++) {
+        const pageNumber = document.createElement('button');
+        pageNumber.textContent = i + 1;
+        pageNumber.addEventListener('click', () => navigatePage(i));
+        paginationContainer.appendChild(pageNumber);
+    }
+
+    // Create right arrow button
+    const rightArrow = document.createElement('button');
+    rightArrow.textContent = '→';
+    rightArrow.addEventListener('click', () => navigatePage(1));
+    paginationContainer.appendChild(rightArrow);
+}
+
+function navigatePage(offset) {
+    // Update the current page index
+    currentPageIndex = Math.max(0, Math.min(currentPageIndex + offset, totalPages - 1));
+
+    // Redisplay reviews for the current page
+    displayReviews(reviewDetails);
 }
 
 function createReviewPageElement(reviews) {
@@ -173,22 +239,18 @@ function createCommentHTML(comments, entityName) {
     return commentSection;
 }
 
-
-
 function getStarIcons(rating) {
     const starCount = 5;
     const fullStars = Math.floor(rating);
     const halfStars = Math.round((rating % 1) * 2) / 2;
     const emptyStars = starCount - fullStars - halfStars;
 
-    const starIcons = '&#9733;'.repeat(fullStars) +
-        (halfStars === 0.5 ? '&#9732;' : '') +
-        '&#9734;'.repeat(emptyStars);
+    const starIcons = '<span class="star">&#9733;</span>'.repeat(fullStars) +
+        (halfStars === 0.5 ? '<span class="star half">&#9733;</span>' : '') +
+        '<span class="star empty">&#9734;</span>'.repeat(emptyStars);
 
     return starIcons;
 }
-
-
 
 
 function fetchEntityDetails(entityId) {

@@ -20,6 +20,17 @@ body {
     margin-bottom: 20px;
 }
 
+.header h2 {
+    font-size: 24px; /* Adjust the font size as needed */
+    color: #333; /* Adjust the color as needed */
+}
+
+.header p {
+    font-size: 18px; /* Adjust the font size as needed */
+    color: #666; /* Adjust the color as needed */
+    margin: 5px 0;
+}
+
 .review {
     margin-bottom: 20px;
     padding: 15px;
@@ -34,8 +45,40 @@ body {
 }
 
 .rating {
-    color: #ffcc00;
+    color: #ffcc00; /* Yellow color */
+    font-size: 1.2em; /* Adjust the size as needed */
 }
+
+.rating::before {
+    content: '\2605'; /* Unicode character for a solid star */
+    margin-right: 2px; /* Adjust spacing */
+}
+
+.rating::after {
+    content: '\2605'; /* Unicode character for a solid star */
+    margin-left: 2px; /* Adjust spacing */
+    color: #ddd; /* Color for empty stars (gray in this example) */
+}
+
+.star {
+    color: #ffcc00; /* Yellow color */
+    font-size: 24px; /* Adjust the size as needed */
+    margin-right: 2px; /* Adjust the spacing between full stars */
+}
+
+.star.half {
+    position: relative;
+    display: inline-block;
+    margin-right: 2px; /* Adjust the spacing between half stars */
+    overflow: hidden;
+}
+
+.star.half:before {
+    content: '\00BD'; /* Unicode character for half star */
+    position: absolute;
+    left: 0;
+}
+
 
 .button {
     background-color: #007bff;
@@ -70,4 +113,18 @@ body {
     margin-bottom: 20px;
     padding: 15px;
     margin-top: -35px;
+}
+
+.pagination-container {
+    margin-top: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.pagination-button {
+    margin: 0 5px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    border-radius: 5px;
 }

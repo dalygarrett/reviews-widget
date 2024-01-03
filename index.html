@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reviews Widget</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
-
 </head>
 <body>
 
@@ -21,7 +20,9 @@
     
         <!-- Container for paginated reviews -->
         <div id="reviews-container"></div>
-            
+
+        <!-- Pagination controls -->
+        <div class="pagination-container" id="pagination-container"></div>
 
         <!-- Button to open the review generation link -->
         <div class="center-button">
@@ -30,15 +31,12 @@
             
     </div>
     
-<script src="reviews-widget.js"></script>
+    <script src="reviews-widget.js"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Replace 'YOUR_ENTITY_ID' with the actual entity ID
-        initWidget({ entityId: '3111644719761037225' });
-    });
-</script>
-
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            initWidget({ entityId: '2473277774254733040' });
+        });
+    </script>
 </body>
 </html>
