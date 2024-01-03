@@ -35,7 +35,7 @@ body {
     margin-bottom: 20px;
     padding: 15px;
     border: 1px solid #ddd;
-    border-radius: 8px;
+    /* border-radius: 8px; */
 }
 
 .review img {
@@ -110,9 +110,13 @@ body {
 
 
 .comment-section {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     padding: 15px;
-    margin-top: -35px;
+    padding-left: 100px;
+    margin-top: -21px;
+    border: 1px solid #ddd;
+    /* border-radius: 8px; */
+
 }
 
 .pagination-container {

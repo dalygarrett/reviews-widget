@@ -187,9 +187,9 @@ function createReviewPageElement(reviews) {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
-                  hour: 'numeric',
-                  minute: 'numeric',
-                  second: 'numeric',
+                //   hour: 'numeric',
+                //   minute: 'numeric',
+                //   second: 'numeric',
               })
             : 'Date Not Available';
 
@@ -204,7 +204,7 @@ function createReviewPageElement(reviews) {
                     <p><strong>Date:</strong> ${formattedReviewDate}</p>
                     <p><strong>Author:</strong> ${review.authorName}</p>
                     <p><strong>Rating:</strong> ${getStarIcons(review.rating)}</p>
-                    ${review.content ? `<p><strong>Content:</strong> ${review.content}</p>` : ''}
+                    ${review.content ? `<p><strong>Review:</strong> ${review.content}</p>` : ''}
                 </div>
             </div>
         `;
