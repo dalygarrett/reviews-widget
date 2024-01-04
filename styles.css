@@ -132,3 +132,13 @@ body {
     padding: 5px 10px;
     border-radius: 5px;
 }
+
+.recommended-text {
+    color: green;
+    font-weight: bold;
+}
+
+.not-recommended-text {
+    color: red;
+    font-weight: bold;
+}

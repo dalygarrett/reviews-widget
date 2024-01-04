@@ -203,7 +203,7 @@ function createReviewPageElement(reviews) {
                 <div class="details-right">
                     <p><strong>Date:</strong> ${formattedReviewDate}</p>
                     <p><strong>Author:</strong> ${review.authorName}</p>
-                    <p><strong>Rating:</strong> ${getStarIcons(review.rating)}</p>
+                    <p><strong>Rating:</strong> ${getStarIcons(review.rating, review.publisher)}</p>
                     ${review.content ? `<p><strong>Review:</strong> ${review.content}</p>` : ''}
                 </div>
             </div>
@@ -253,7 +253,18 @@ function createCommentHTML(comments, entityName) {
     return commentSection;
 }
 
-function getStarIcons(rating) {
+function getStarIcons(rating, publisher) {
+    console.log("Rating:", rating);
+    console.log("Publisher:", publisher);
+
+    if (publisher === 'FACEBOOK') {
+        if (rating === 0) {
+            return '<span class="recommended-text">Recommended</span>';
+        } else {
+            return '<span class="not-recommended-text">Not Recommended</span>';
+        }
+    }
+
     const starCount = 5;
     const fullStars = Math.floor(rating);
     const halfStars = Math.round((rating % 1) * 2) / 2;
@@ -266,10 +277,9 @@ function getStarIcons(rating) {
     return starIcons;
 }
 
-
 function fetchEntityDetails(entityId) {
     console.log('Fetching entity details...');
-    const apiKey = "99129b94608fd8beb48863bbf601a569";
+    const apiKey = "d0f41062345f5ae64d420a41d49b7fd3";
     const apiUrl = `https://corsproxy.io/?https://cdn.yextapis.com/v2/accounts/me/entities/${entityId}?api_key=${apiKey}&v=20231030`;
 
     return fetch(apiUrl)
@@ -283,8 +293,8 @@ function fetchEntityDetails(entityId) {
 
 function fetchReviews(entityId) {
     console.log('Fetching reviews...');
-    const apiKey = "99129b94608fd8beb48863bbf601a569";
-    const apiUrl = `https://cdn.yextapis.com/v2/accounts/me/content/reviews?api_key=${apiKey}&v=20231019&entity.id=${entityId}`;
+    const apiKey = "d0f41062345f5ae64d420a41d49b7fd3";
+    const apiUrl = `https://cdn.yextapis.com/v2/accounts/me/content/reviewsEndpoint?api_key=${apiKey}&v=20231019&entity.id=${entityId}&limit=50`;
 
     return fetch(apiUrl)
         .then((response) => {
