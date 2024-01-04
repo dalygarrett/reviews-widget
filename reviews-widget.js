@@ -233,8 +233,18 @@ function createCommentHTML(comments, entityName) {
     comments.forEach((comment) => {
         const commentElement = document.createElement('div');
         commentElement.classList.add('comment');
+
+        // Modify the date formatting to exclude hours, minutes, and seconds
+        const formattedCommentDate = comment.commentDate
+            ? new Date(comment.commentDate).toLocaleString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+              })
+            : 'Date Not Available';
+
         commentElement.innerHTML = `
-            <p><strong>Date:</strong> ${new Date(comment.commentDate).toLocaleString()}</p>
+            <p><strong>Date:</strong> ${formattedCommentDate}</p>
             <p><strong>${entityName}:</strong> ${comment.content}</p>
         `;
         commentSection.appendChild(commentElement);
