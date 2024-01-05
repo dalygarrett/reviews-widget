@@ -106,11 +106,21 @@ function displayReviews() {
         button.classList.add("pagination-button");
         button.addEventListener("click", () => paginate(i, reviewsPerPage));
         paginationContainer.appendChild(button);
+
+        // Set 'active' class for the initial page
+        if (i === 1) {
+            button.classList.add('active');
+        }
     }
 
 }
 
 function paginate(currentPage, reviewsPerPage) {
+    const paginationButtons = document.querySelectorAll('.pagination-button');
+
+    // Remove the 'active' class from all buttons
+    paginationButtons.forEach(button => button.classList.remove('active'));
+
     const startIndex = (currentPage - 1) * reviewsPerPage;
     const endIndex = startIndex + reviewsPerPage;
     const pageReviews = reviews.slice(startIndex, endIndex);
@@ -118,6 +128,9 @@ function paginate(currentPage, reviewsPerPage) {
     reviewsContainer.innerHTML = ""; // Clear reviews container
     const pageElement = createReviewPageElement(pageReviews);
     reviewsContainer.appendChild(pageElement);
+
+    // Add the 'active' class to the current button
+    paginationButtons[currentPage - 1].classList.add('active');
 }
 
 function updatePaginationControls(totalPages) {
@@ -136,8 +149,13 @@ function updatePaginationControls(totalPages) {
     for (let i = 0; i < totalPages; i++) {
         const pageNumber = document.createElement('button');
         pageNumber.textContent = i + 1;
-        pageNumber.addEventListener('click', () => navigatePage(i));
+        pageNumber.addEventListener('click', () => paginate(i + 1, reviewsPerPage));
         paginationContainer.appendChild(pageNumber);
+
+        // Set 'active' class for the initial page
+        if (i === 0) {
+            pageNumber.classList.add('active');
+        }
     }
 
     // Create right arrow button
